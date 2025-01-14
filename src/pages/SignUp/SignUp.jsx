@@ -12,7 +12,7 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    
     formState: { errors },
   } = useForm();
 
@@ -22,22 +22,26 @@ const SignUp = () => {
     .then(result =>{
         const loggedUser = result.user;
         console.log(loggedUser);
-        
+        navigate('/');
+        toast.success("Signup Successful");
     })
   };
 
   // Handle Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      //User Registration using google
-      const data = await googleSignIn();
-      //   await saveUser(data?.user);
+      const result = await googleSignIn();
+      const user = result.user;
+      console.log("Google User:", user);
+
+      // Save user to the database if needed
+      // await saveUser(user);
 
       navigate("/");
-      toast.success("Signup Successful");
+      toast.success("Signup Successful with Google");
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
+      console.error(err);
+      toast.error("Google Sign-In failed. Please try again.");
     }
   };
   return (

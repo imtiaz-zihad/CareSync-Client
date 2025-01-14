@@ -5,6 +5,7 @@ import ErrorSection from "../pages/Shared/ErrorSection/ErrorSection";
 import CampDetails from "../pages/CampDetails/CampDetails";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
+import AvailableCamp from "../pages/AvailableCamp/AvailableCamp";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
         {
             path: 'signup',
             element: <SignUp/>
+        },
+        {
+            path: 'available-camps',
+            element: <AvailableCamp/>
         },
     ]
   },

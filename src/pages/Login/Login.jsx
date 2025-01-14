@@ -1,14 +1,44 @@
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaGoogle } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
-
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 const Login = () => {
-    const {signIn} = useContext(AuthContext)
-  const handleSubmit = () => {
+  const { signIn,googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    signIn();
+  // Handle form submission
+  const onSubmit = (data) => {
+    console.log(data);
+    signIn(data.email, data.password).catch((error) =>
+      console.error("Error during sign-in:", error)
+    );
+    toast.success("Login Successful");
+    navigate("/");
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const user = result.user;
+      console.log("Google User:", user);
+
+      // Save user to the database if needed
+      // await saveUser(user);
+
+      navigate("/");
+      toast.success("Signup Successful with Google");
+    } catch (err) {
+      console.error(err);
+      toast.error("Google Sign-In failed. Please try again.");
+    }
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
@@ -23,7 +53,7 @@ const Login = () => {
           </p>
         </div>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           noValidate=""
           action=""
           className="space-y-6 ng-untouched ng-pristine ng-valid"
@@ -37,11 +67,19 @@ const Login = () => {
                 type="email"
                 name="email"
                 id="email"
+                {...register("email", {
+                  required: "Email is required",
+                })}
                 required
                 placeholder="Enter Your Email Here"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-blue-500 bg-gray-200 text-gray-900"
                 data-temp-mail-org="0"
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
               <div className="flex justify-between">
@@ -52,12 +90,20 @@ const Login = () => {
               <input
                 type="password"
                 name="password"
+                {...register("password", {
+                  required: "password is required",
+                })}
                 autoComplete="current-password"
                 id="password"
                 required
                 placeholder="*******"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-blue-500 bg-gray-200 text-gray-900"
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -88,7 +134,7 @@ const Login = () => {
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
         <div
-          // onClick={handleGoogleSignIn}
+          onClick={handleGoogleSignIn}
           className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
         >
           <FaGoogle size={32} />

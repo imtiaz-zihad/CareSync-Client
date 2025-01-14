@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 const Slide = ({ image }) => {
     return (
-      <div className="relative w-full h-[20rem] overflow-hidden">
+      <div className="relative w-full h-[30rem] overflow-hidden">
         {/* Main Image */}
         <img
           src={image}
