@@ -6,25 +6,28 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
-  const { googleSignIn,createUser } = useContext(AuthContext);
+  const { googleSignIn, createUser } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    
+
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    createUser(data.email,data.password)
-    .then(result =>{
-        const loggedUser = result.user;
-        console.log(loggedUser);
-        navigate('/');
-        toast.success("Signup Successful");
-    })
+    
+    createUser(data.email, data.password)
+    
+    .then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+      
+    });
+    navigate("/");
+    toast.success("Signup Successful");
   };
 
   // Handle Google Signin
@@ -129,7 +132,11 @@ const SignUp = () => {
             >
               Continue
             </button> */}
-            <input className="bg-blue-500 w-full rounded-md py-3 text-white"  type="submit" value={'Sign Up'} />
+            <input
+              className="bg-blue-500 w-full rounded-md py-3 text-white"
+              type="submit"
+              value={"Sign Up"}
+            />
           </div>
         </form>
         {errors.exampleRequired && <span>This field is required</span>}

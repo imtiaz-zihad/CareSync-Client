@@ -74,6 +74,7 @@ const Navbar = () => {
                       <div className="flex flex-col cursor-pointer">
                         <Link
                           to="/"
+                          onClick={() => setIsOpen(false)}
                           className={`block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold ${
                             isActive("/") ? "bg-neutral-200" : ""
                           }`}
@@ -82,6 +83,7 @@ const Navbar = () => {
                         </Link>
                         <Link
                           to="/dashboard"
+                          onClick={() => setIsOpen(false)}
                           className={`px-4 py-3 hover:bg-neutral-100 transition font-semibold ${
                             isActive("/dashboard") ? "bg-neutral-200" : ""
                           }`}
@@ -89,7 +91,10 @@ const Navbar = () => {
                           Dashboard
                         </Link>
                         <div
-                          onClick={logOut}
+                          onClick={() => {
+                            setIsOpen(false);
+                            logOut();
+                          }}
                           className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
                         >
                           Logout

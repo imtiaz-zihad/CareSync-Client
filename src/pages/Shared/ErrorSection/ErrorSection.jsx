@@ -5,7 +5,7 @@ const ErrorSection = () => {
     <section >
       <div className="flex items-center flex-col min-h-screen px-6 py-12 mx-auto">
         <img
-          className="w-full"
+          className=""
           src={error}
           alt="Error logo"
         />

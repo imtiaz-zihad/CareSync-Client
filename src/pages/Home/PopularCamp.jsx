@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 
 const PopularCamp = () => {
-  const [camps, setCamps] = useState([]);
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_Server_LINK}/camps`)
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedCamps = data.sort(
-          (a, b) => b.participant_count - a.participant_count
-        );
-        setCamps(sortedCamps.slice(0, 6));
-      })
-      .catch((error) => console.error("Error fetching camps:", error));
-  }, []);
+
+  const { data: camps, isLoading } = useQuery({
+    queryKey: ['camps'],
+    queryFn: async () => {
+      const { data } = await axios(`${import.meta.env.VITE_Server_LINK}/camps`);
+      return data;
+    }
+  });
+  if (isLoading) return <LoadingSpinner />
 
   return (
     <div className="bg-gray-100 py-10">

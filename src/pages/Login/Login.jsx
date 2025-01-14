@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaGoogle } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 const Login = () => {
   const { signIn,googleSignIn } = useContext(AuthContext);
+  
+  const location = useLocation();
+
+  const from = location?.state?.from?.pathname || '/';
   const navigate = useNavigate();
   const {
     register,
@@ -21,7 +25,7 @@ const Login = () => {
       console.error("Error during sign-in:", error)
     );
     toast.success("Login Successful");
-    navigate("/");
+    navigate(from,{replace: true})
   };
 
   const handleGoogleSignIn = async () => {
@@ -33,6 +37,7 @@ const Login = () => {
       // Save user to the database if needed
       // await saveUser(user);
 
+      navigate(from,{replace: true})
       navigate("/");
       toast.success("Signup Successful with Google");
     } catch (err) {
