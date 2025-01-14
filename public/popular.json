@@ -1,0 +1,114 @@
+[
+      {
+        "_id": "1",
+        "name": "Health and Wellness Camp",
+        "image": "https://example.com/health-wellness.jpg",
+        "fees": 500,
+        "date_time": "2025-02-15T10:00:00",
+        "location": "Sher-E-Bangla Nagar, Dhaka, Bangladesh",
+        "healthcare_professional": "Dr. Ayesha Rahman",
+        "participant_count": 50,
+        "description": "A comprehensive health and wellness camp focusing on physical fitness and mental health."
+      },
+      {
+        "_id": "2",
+        "name": "Fitness Boot Camp",
+        "image": "https://example.com/fitness-bootcamp.jpg",
+        "fees": 300,
+        "date_time": "2025-03-10T08:00:00",
+        "location": "Dhanmondi Lake Park, Dhaka, Bangladesh",
+        "healthcare_professional": "Coach Imran Hossain",
+        "participant_count": 75,
+        "description": "A rigorous fitness boot camp with high-intensity workouts and personalized guidance."
+      },
+      {
+        "_id": "3",
+        "name": "Diabetes Awareness Camp",
+        "image": "https://example.com/diabetes-awareness.jpg",
+        "fees": 0,
+        "date_time": "2025-04-07T09:00:00",
+        "location": "Chittagong Medical College, Chittagong, Bangladesh",
+        "healthcare_professional": "Dr. Nazmul Karim",
+        "participant_count": 100,
+        "description": "Free consultations and workshops to raise awareness about diabetes management."
+      },
+      {
+        "_id": "4",
+        "name": "Mental Health Camp",
+        "image": "https://example.com/mental-health.jpg",
+        "fees": 200,
+        "date_time": "2025-05-12T11:00:00",
+        "location": "Banani Club, Dhaka, Bangladesh",
+        "healthcare_professional": "Psychologist Shirin Akhter",
+        "participant_count": 60,
+        "description": "Sessions on mental health, stress management, and personalized therapy consultations."
+      },
+      {
+        "_id": "5",
+        "name": "Child Health Camp",
+        "image": "https://example.com/child-health.jpg",
+        "fees": 100,
+        "date_time": "2025-06-20T10:00:00",
+        "location": "Laxmipur General Hospital, Laxmipur, Bangladesh",
+        "healthcare_professional": "Dr. Rahima Begum",
+        "participant_count": 120,
+        "description": "Dedicated to child health with pediatricians offering consultations and workshops for parents."
+      },
+      {
+        "_id": "6",
+        "name": "Women’s Health Camp",
+        "image": "https://example.com/womens-health.jpg",
+        "fees": 150,
+        "date_time": "2025-07-18T10:00:00",
+        "location": "Mirpur Community Center, Dhaka, Bangladesh",
+        "healthcare_professional": "Dr. Taslima Haque",
+        "participant_count": 90,
+        "description": "Focused on women's health, including gynecological checkups and wellness sessions."
+      },
+      {
+        "_id": "7",
+        "name": "Eye Care Camp",
+        "image": "https://example.com/eye-care.jpg",
+        "fees": 50,
+        "date_time": "2025-08-25T09:00:00",
+        "location": "Sylhet Eye Hospital, Sylhet, Bangladesh",
+        "healthcare_professional": "Dr. Arif Chowdhury",
+        "participant_count": 80,
+        "description": "Free eye exams and consultations to promote better eye health."
+      },
+      {
+        "_id": "8",
+        "name": "Nutrition Camp",
+        "image": "https://example.com/nutrition-camp.jpg",
+        "fees": 300,
+        "date_time": "2025-09-15T10:00:00",
+        "location": "Gulshan Community Hall, Dhaka, Bangladesh",
+        "healthcare_professional": "Nutritionist Farhana Sultana",
+        "participant_count": 70,
+        "description": "Learn about healthy eating habits and get personalized nutrition plans."
+      },
+      {
+        "_id": "9",
+        "name": "Dental Care Camp",
+        "image": "https://example.com/dental-care.jpg",
+        "fees": 100,
+        "date_time": "2025-10-05T10:00:00",
+        "location": "Rajshahi Dental College, Rajshahi, Bangladesh",
+        "healthcare_professional": "Dr. Mahmudur Rahman",
+        "participant_count": 50,
+        "description": "Oral health awareness and free dental checkups by professional dentists."
+      },
+      {
+        "_id": "10",
+        "name": "Cardiac Health Camp",
+        "image": "https://example.com/cardiac-health.jpg",
+        "fees": 400,
+        "date_time": "2025-11-20T09:00:00",
+        "location": "National Heart Foundation, Dhaka, Bangladesh",
+        "healthcare_professional": "Dr. Kamrul Islam",
+        "participant_count": 100,
+        "description": "Focused on heart health with ECG tests, consultations, and dietary advice."
+      }
+    ]
+
+  
