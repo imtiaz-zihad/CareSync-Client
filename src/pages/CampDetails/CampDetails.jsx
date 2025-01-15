@@ -7,17 +7,19 @@ import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CampDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
+  const axiosSecure = useAxiosSecure();
 
   const { data: camps, isLoading } = useQuery({
     queryKey: ["camps"],
     queryFn: async () => {
-      const { data } = await axios(
-        `${import.meta.env.VITE_Server_LINK}/camps/${id}`
+      const { data } = await axiosSecure(
+        `/camps/${id}`
       );
       return data;
     },
@@ -39,7 +41,7 @@ const CampDetails = () => {
     _id,
   } = camps;
 
-  const handleFormSubmit =async (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault(); // Prevent page reload
 
     if (user && user.email) {
@@ -55,8 +57,10 @@ const CampDetails = () => {
         phoneNumber: formData.get("phoneNumber"),
         gender: formData.get("gender"),
         emergencyContact: formData.get("emergencyContact"),
+        paymentStatus: false,
+        paymentConfirmed: false,
       };
-  
+
       try {
         await axios.post(
           `${import.meta.env.VITE_Server_LINK}/participants`,
@@ -212,7 +216,9 @@ const CampDetails = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block font-medium text-gray-700">Gender</label>
+                <label className="block font-medium text-gray-700">
+                  Gender
+                </label>
                 <select
                   name="gender"
                   className="w-full p-2 border rounded"

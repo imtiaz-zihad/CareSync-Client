@@ -8,6 +8,14 @@ import SignUp from "../pages/SignUp/SignUp";
 import AvailableCamp from "../pages/AvailableCamp/AvailableCamp";
 import DashBoard from "../Layout/DashBoard";
 import PrivateRouter from "./PrivateRouter";
+import MyCamp from "../pages/Dashboard/MyCamp";
+import Analytics from "../pages/Dashboard/Analytics";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory";
+import Profile from "../pages/Dashboard/Profile";
+import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
+import AddCamp from "../pages/Dashboard/Admin/AddCamp";
+import ManageCamp from "../pages/Dashboard/Admin/ManageCamp";
+import RegisterCamp from "../pages/Dashboard/Admin/RegisterCamp";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -44,4 +52,46 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: 'dashboard',
+    element: <DashBoard></DashBoard>,
+    children: [
+      {
+        path: 'my-camp',
+        element: <MyCamp/>
+      },
+      {
+        path: 'analytics',
+        element: <Analytics/>
+      },
+      {
+        path: 'payment-history',
+        element: <PaymentHistory/>
+      },
+      {
+        path: 'profile',
+        element: <Profile/>
+      },
+
+      // Admin here
+
+      {
+        path: 'admin-profile',
+        element: <AdminProfile/>
+      },
+      {
+        path: 'add-camp',
+        element: <AddCamp/>
+      },
+      {
+        path: 'manage-camp',
+        element: <ManageCamp/>
+      },
+      {
+        path: 'register-camp',
+        element: <RegisterCamp/>
+      },
+      
+    ]
+  }
 ]);

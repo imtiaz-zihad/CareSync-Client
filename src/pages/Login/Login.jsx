@@ -5,8 +5,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 const Login = () => {
   const { signIn,googleSignIn } = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
   
   const location = useLocation();
 
@@ -28,23 +30,31 @@ const Login = () => {
     navigate(from,{replace: true})
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await googleSignIn();
-      const user = result.user;
-      console.log("Google User:", user);
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+        };
+  
+        axiosPublic.post("/users", userInfo)
 
-      // Save user to the database if needed
-      // await saveUser(user);
-
-      navigate(from,{replace: true})
-      navigate("/");
-      toast.success("Signup Successful with Google");
-    } catch (err) {
-      console.error(err);
-      toast.error("Google Sign-In failed. Please try again.");
-    }
+        .then(res =>{
+          console.log(res.data)
+          navigate("/")
+        })
+         
+      })
+      .catch(() => {
+        toast.error("Google Sign-In failed. Please try again.");
+      });
   };
+  
+  
+  
+
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
       <Helmet>

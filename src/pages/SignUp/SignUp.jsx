@@ -4,9 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
-  const { googleSignIn, createUser } =
+  const axiosPublic = useAxiosPublic();
+  const { googleSignIn, createUser, updateUserProfile } =
     useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -18,35 +20,50 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    
-    createUser(data.email, data.password)
-    
-    .then((result) => {
+    createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
-      
+      updateUserProfile(data.name, data.photoURL).then(() => {
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+
+        axiosPublic.post("/users", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            navigate("/");
+            toast.success("Signup Successful");
+          }
+        });
+      });
     });
-    navigate("/");
-    toast.success("Signup Successful");
   };
 
   // Handle Google Signin
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await googleSignIn();
-      const user = result.user;
-      console.log("Google User:", user);
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+        };
+  
+        axiosPublic.post("/users", userInfo)
 
-      // Save user to the database if needed
-      // await saveUser(user);
-
-      navigate("/");
-      toast.success("Signup Successful with Google");
-    } catch (err) {
-      console.error(err);
-      toast.error("Google Sign-In failed. Please try again.");
-    }
+        .then(res =>{
+          console.log(res.data)
+          navigate("/")
+        })
+         
+      })
+      .catch(() => {
+        toast.error("Google Sign-In failed. Please try again.");
+      });
   };
+  
+  
+  
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">

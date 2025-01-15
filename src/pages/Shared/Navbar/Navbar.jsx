@@ -82,7 +82,7 @@ const Navbar = () => {
                           Home
                         </Link>
                         <Link
-                          to="/dashboard"
+                          to="/dashboard/my-camp"
                           onClick={() => setIsOpen(false)}
                           className={`px-4 py-3 hover:bg-neutral-100 transition font-semibold ${
                             isActive("/dashboard") ? "bg-neutral-200" : ""
