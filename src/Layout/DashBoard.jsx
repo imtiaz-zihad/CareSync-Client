@@ -4,9 +4,10 @@ import { BiRegistered } from "react-icons/bi";
 import { MdPayment } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { FaHouse } from "react-icons/fa6";
+import useAdmin from "../hooks/useAdmin";
 
 const DashBoard = () => {
-  const isAdmin = true;
+  const [isAdmin] = useAdmin();
   return (
     <div className="flex">
       <div className="w-64 min-h-screen bg-sky-300">

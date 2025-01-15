@@ -16,6 +16,7 @@ import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 import AddCamp from "../pages/Dashboard/Admin/AddCamp";
 import ManageCamp from "../pages/Dashboard/Admin/ManageCamp";
 import RegisterCamp from "../pages/Dashboard/Admin/RegisterCamp";
+import AdminRouter from "./AdminRouter";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -77,19 +78,19 @@ export const router = createBrowserRouter([
 
       {
         path: 'admin-profile',
-        element: <AdminProfile/>
+        element: <AdminRouter><AdminProfile/></AdminRouter>
       },
       {
         path: 'add-camp',
-        element: <AddCamp/>
+        element: <AdminRouter><AddCamp/></AdminRouter>
       },
       {
         path: 'manage-camp',
-        element: <ManageCamp/>
+        element: <AdminRouter><ManageCamp/></AdminRouter>
       },
       {
         path: 'register-camp',
-        element: <RegisterCamp/>
+        element: <AdminRouter> <RegisterCamp/></AdminRouter>
       },
       
     ]
