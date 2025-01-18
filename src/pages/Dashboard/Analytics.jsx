@@ -2,10 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from "recharts";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Analytics = () => {
   const axiosSecure = useAxiosSecure();
-  const 
+  const {user} = useContext(AuthContext)
 
   // Fetch participant's registered camps
   const {
@@ -15,7 +17,7 @@ const Analytics = () => {
   } = useQuery({
     queryKey: ["analyticsData"],
     queryFn: async () => {
-      const { data } = await axiosSecure.get(`/my-camps/${}`);
+      const { data } = await axiosSecure.get(`/my-camps/${user?.email}`);
       return data;
     },
   });
