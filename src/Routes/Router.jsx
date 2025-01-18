@@ -18,6 +18,7 @@ import ManageCamp from "../pages/Dashboard/Admin/ManageCamp";
 import RegisterCamp from "../pages/Dashboard/Admin/RegisterCamp";
 import AdminRouter from "./AdminRouter";
 import UpdateCamp from "../pages/Dashboard/Admin/UpdateCamp";
+import Payment from "../components/Payment";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -55,50 +56,76 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
+    path: "dashboard",
     element: <DashBoard></DashBoard>,
     children: [
       {
-        path: 'my-camp',
-        element: <MyCamp/>
+        path: "my-camp",
+        element: <MyCamp />,
       },
       {
-        path: 'analytics',
-        element: <Analytics/>
+        path: "analytics",
+        element: <Analytics />,
       },
       {
-        path: 'payment-history',
-        element: <PaymentHistory/>
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
       {
-        path: 'profile',
-        element: <Profile/>
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: 'payment',
+        element: <Payment />
       },
 
       // Admin here
 
       {
-        path: 'admin-profile',
-        element: <AdminRouter><AdminProfile/></AdminRouter>
+        path: "admin-profile",
+        element: (
+          <AdminRouter>
+            <AdminProfile />
+          </AdminRouter>
+        ),
       },
       {
-        path: 'add-camp',
-        element: <AdminRouter><AddCamp/></AdminRouter>
+        path: "add-camp",
+        element: (
+          <AdminRouter>
+            <AddCamp />
+          </AdminRouter>
+        ),
       },
       {
-        path: 'manage-camp',
-        element: <AdminRouter><ManageCamp/></AdminRouter>
+        path: "manage-camp",
+        element: (
+          <AdminRouter>
+            <ManageCamp />
+          </AdminRouter>
+        ),
       },
       {
-        path: 'register-camp',
-        element: <AdminRouter> <RegisterCamp/></AdminRouter>
+        path: "register-camp",
+        element: (
+          <AdminRouter>
+            {" "}
+            <RegisterCamp />
+          </AdminRouter>
+        ),
       },
       {
-        path: 'updateCamp/:id',
-        element: <AdminRouter> <UpdateCamp/></AdminRouter>,
-        loader: ({params}) => fetch(`http://localhost:5000/camps/${params.id}`)
+        path: "updateCamp/:id",
+        element: (
+          <AdminRouter>
+            {" "}
+            <UpdateCamp />
+          </AdminRouter>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/camps/${params.id}`),
       },
-      
-    ]
-  }
+    ],
+  },
 ]);
