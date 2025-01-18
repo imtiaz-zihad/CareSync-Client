@@ -17,6 +17,7 @@ import AddCamp from "../pages/Dashboard/Admin/AddCamp";
 import ManageCamp from "../pages/Dashboard/Admin/ManageCamp";
 import RegisterCamp from "../pages/Dashboard/Admin/RegisterCamp";
 import AdminRouter from "./AdminRouter";
+import UpdateCamp from "../pages/Dashboard/Admin/UpdateCamp";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -91,6 +92,11 @@ export const router = createBrowserRouter([
       {
         path: 'register-camp',
         element: <AdminRouter> <RegisterCamp/></AdminRouter>
+      },
+      {
+        path: 'updateCamp/:id',
+        element: <AdminRouter> <UpdateCamp/></AdminRouter>,
+        loader: ({params}) => fetch(`http://localhost:5000/camps/${params.id}`)
       },
       
     ]

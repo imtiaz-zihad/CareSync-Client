@@ -1,16 +1,15 @@
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery} from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
-import toast from "react-hot-toast";
+
 
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
 
 const ManageCamp = () => {
   const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+ 
 
   // Fetch camps created by the organizer
   const { data: camps, isLoading } = useQuery({
@@ -21,30 +20,12 @@ const ManageCamp = () => {
     },
   });
 
-  // Mutation to delete a camp
-  const deleteMutation = useMutation({
-    mutationFn: async (campId) => {
-      await axiosSecure.delete(`/delete-camp/${campId}`);
-    },
-    onSuccess: () => {
-      toast.success("Camp deleted successfully!");
-      queryClient.invalidateQueries(["organizerCamps"]);
-    },
-    onError: (error) => {
-      console.error("Error deleting camp:", error);
-      toast.error("Failed to delete the camp. Please try again.");
-    },
-  });
+ 
 
-  const handleDelete = (campId) => {
-    if (window.confirm("Are you sure you want to delete this camp?")) {
-      deleteMutation.mutate(campId);
-    }
-  };
 
-  const handleUpdate = (campId) => {
-    navigate(`/update-camp/${campId}`);
-  };
+
+
+ 
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -77,14 +58,16 @@ const ManageCamp = () => {
                   {camp.healthcare_professional}
                 </td>
                 <td className="py-3 px-6 text-center">
-                  <button
-                    onClick={() => handleUpdate(camp._id)}
+                 <Link to={`/dashboard/updateCamp/${camp._id}`}>
+                 <button
+                    
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-300 mr-2"
                   >
                     Update
                   </button>
+                 </Link>
                   <button
-                    onClick={() => handleDelete(camp._id)}
+                    // onClick={() => handleDelete(camp._id)}
                     className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
                   >
                     Delete
