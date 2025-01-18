@@ -3,7 +3,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
 
@@ -11,6 +11,9 @@ const MyCamp = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const { user } = useContext(AuthContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCamp, setSelectedCamp] = useState(null);
+  const [feedback, setFeedback] = useState("");
 
   const {
     data: camps = [],
@@ -28,10 +31,22 @@ const MyCamp = () => {
     try {
       await axiosSecure.delete(`/my-camps/${id}`);
       toast.success("Registration canceled successfully.");
-      queryClient.invalidateQueries("myCamps"); // Refresh data
+      queryClient.invalidateQueries("myCamps");
     } catch (error) {
       console.error("Error deleting camp:", error.message);
       toast.error("Failed to cancel registration. Please try again.");
+    }
+  };
+
+  const handleFeedbackSubmit = async () => {
+    try {
+      await axiosSecure.post(`/my-camps/feedback/${selectedCamp._id}`, { feedback, Name: user?.displayName }  );
+      toast.success("Feedback submitted successfully.");
+      setIsModalOpen(false);
+      setFeedback("");
+    } catch (error) {
+      console.error("Error submitting feedback:", error.message);
+      toast.error("Failed to submit feedback. Please try again.");
     }
   };
 
@@ -64,20 +79,13 @@ const MyCamp = () => {
                 <tr key={index} className="border-t border-gray-300">
                   <td className="px-4 py-2 text-center">{camp.name}</td>
                   <td className="px-4 py-2 text-center">${camp.fees}</td>
-                  <td className="px-4 py-2 text-center">
-                    {camp.participantName}
-                  </td>
+                  <td className="px-4 py-2 text-center">{camp.participantName}</td>
                   <td className="px-4 py-2 text-center">
                     {camp.paymentStatus ? (
                       <span className="text-green-500">Paid</span>
                     ) : (
-                      <Link
-                        to={`/dashboard/payment`}
-                        state={{ price: camp.fees, campId: camp._id }}
-                      >
-                        <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">
-                          Pay
-                        </button>
+                      <Link to={`/dashboard/payment`} state={{ price: camp.fees, campId: camp._id }}>
+                        <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">Pay</button>
                       </Link>
                     )}
                   </td>
@@ -90,24 +98,17 @@ const MyCamp = () => {
                   </td>
                   <td className="px-4 py-2 text-center">
                     <button
-                      className={`px-4 py-2 text-white rounded ${
-                        camp.paymentStatus
-                          ? "bg-green-500 hover:bg-green-600 transition"
-                          : "bg-gray-400 cursor-not-allowed"
-                      }`}
-                      onClick={() =>
-                        camp.paymentStatus && alert(`Feedback for ${camp.name}`)
-                      }
+                      className={`px-4 py-2 text-white rounded ${camp.paymentStatus ? "bg-green-500 hover:bg-green-600 transition" : "bg-gray-400 cursor-not-allowed"}`}
+                      onClick={() => {
+                        setSelectedCamp(camp);
+                        setIsModalOpen(true);
+                      }}
                       disabled={!camp.paymentStatus}
                     >
                       Feedback
                     </button>
                     <button
-                      className={`ml-2 px-4 py-2 text-white rounded ${
-                        camp.paymentStatus
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-red-500 hover:bg-red-600 transition"
-                      }`}
+                      className={`ml-2 px-4 py-2 text-white rounded ${camp.paymentStatus ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600 transition"}`}
                       onClick={() => handleDelete(camp._id)}
                       disabled={camp.paymentStatus}
                     >
@@ -118,6 +119,32 @@ const MyCamp = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h3 className="text-xl font-semibold">Submit Feedback for {selectedCamp?.name}</h3>
+            <textarea
+              className="w-full p-2 border rounded mt-2"
+              rows="4"
+              placeholder="Write your feedback..."
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            ></textarea>
+            <button
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              onClick={handleFeedbackSubmit}
+            >
+              Submit
+            </button>
+            <button
+              className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
