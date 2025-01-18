@@ -4,10 +4,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContaine
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Helmet } from "react-helmet-async";
 
 const Analytics = () => {
   const axiosSecure = useAxiosSecure();
   const {user} = useContext(AuthContext)
+
 
   // Fetch participant's registered camps
   const {
@@ -34,6 +36,10 @@ const Analytics = () => {
 
   return (
     <div className="container mx-auto px-6 py-10">
+        <Helmet>
+        <title>Analytics | CareSync</title>
+      </Helmet>
+        <h2>Hi, Welcome {user?.displayName}</h2>
       <h2 className="text-4xl font-bold text-center mb-6">Analytics</h2>
       {camps.length === 0 ? (
         <p className="text-center text-gray-600">No registered camps found.</p>

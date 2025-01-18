@@ -5,11 +5,12 @@ import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Helmet } from "react-helmet-async";
 
 const MyCamp = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const {
     data: camps = [],
@@ -39,6 +40,9 @@ const MyCamp = () => {
 
   return (
     <div className="container mx-auto px-6 py-10">
+      <Helmet>
+        <title>My Camps | CareSync</title>
+      </Helmet>
       <h2 className="text-4xl font-bold text-center mb-6">My Camps</h2>
       {camps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered.</p>
@@ -91,7 +95,9 @@ const MyCamp = () => {
                           ? "bg-green-500 hover:bg-green-600 transition"
                           : "bg-gray-400 cursor-not-allowed"
                       }`}
-                      onClick={() => camp.paymentStatus && alert(`Feedback for ${camp.name}`)}
+                      onClick={() =>
+                        camp.paymentStatus && alert(`Feedback for ${camp.name}`)
+                      }
                       disabled={!camp.paymentStatus}
                     >
                       Feedback

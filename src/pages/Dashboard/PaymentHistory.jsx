@@ -3,10 +3,11 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Helmet } from "react-helmet-async";
 
 const PaymentHistory = () => {
   const axiosSecure = useAxiosSecure();
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   // Fetch payment history using React Query
   const {
@@ -27,6 +28,9 @@ const PaymentHistory = () => {
 
   return (
     <div className="container mx-auto px-6 py-10">
+      <Helmet>
+        <title>Payment History | CareSync</title>
+      </Helmet>
       <h2 className="text-4xl font-bold text-center mb-6">Payment History</h2>
       {paymentHistory.length === 0 ? (
         <p className="text-center text-gray-600">No payment history found.</p>
@@ -44,7 +48,9 @@ const PaymentHistory = () => {
             <tbody>
               {paymentHistory.map((payment, index) => (
                 <tr key={index} className="border-t border-gray-300">
-                  <td className="px-4 py-2 text-center">{payment.transitionId}</td>
+                  <td className="px-4 py-2 text-center">
+                    {payment.transitionId}
+                  </td>
                   <td className="px-4 py-2 text-center">${payment.price}</td>
                   <td className="px-4 py-2 text-center">
                     {payment.status ? (
