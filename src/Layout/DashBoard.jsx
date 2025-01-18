@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { IoAnalytics } from "react-icons/io5";
 import { BiRegistered } from "react-icons/bi";
-import { MdPayment } from "react-icons/md";
+import { MdManageSearch, MdNoteAdd, MdPayment } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { FaHouse } from "react-icons/fa6";
+import { FaHouse, FaRegRegistered } from "react-icons/fa6";
 import useAdmin from "../hooks/useAdmin";
 
 const DashBoard = () => {
@@ -16,22 +16,22 @@ const DashBoard = () => {
             <>
               <li>
                 <NavLink to="/dashboard/admin-profile">
-                  <IoAnalytics /> Profile
+                <CgProfile /> Profile
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/add-camp">
-                  <IoAnalytics /> Add a Camp
+                <MdNoteAdd /> Add a Camp
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/manage-camp">
-                  <IoAnalytics /> Manage Camp
+                <MdManageSearch /> Manage Camp
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/register-camp">
-                  <IoAnalytics /> Register camp
+                <FaRegRegistered /> Register camp
                 </NavLink>
               </li>
             </>

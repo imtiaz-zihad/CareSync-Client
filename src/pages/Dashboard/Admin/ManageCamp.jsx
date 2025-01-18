@@ -1,18 +1,19 @@
-
-import { useQuery} from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-
-
 
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
+import toast from "react-hot-toast";
 
 const ManageCamp = () => {
   const axiosSecure = useAxiosSecure();
- 
 
   // Fetch camps created by the organizer
-  const { data: camps, isLoading } = useQuery({
+  const {
+    data: camps,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["organizerCamps"],
     queryFn: async () => {
       const { data } = await axiosSecure("/camps");
@@ -20,12 +21,16 @@ const ManageCamp = () => {
     },
   });
 
- 
-
-
-
-
- 
+  const handleDelete = async (id) => {
+    try {
+      await axiosSecure.delete(`/camps/${id}`);
+      toast.success("Camp Deleted successfully.");
+      refetch();
+    } catch (error) {
+      console.error("Error deleting camp:", error.message);
+      toast.error("Failed to cancel registration. Please try again.");
+    }
+  };
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -58,16 +63,13 @@ const ManageCamp = () => {
                   {camp.healthcare_professional}
                 </td>
                 <td className="py-3 px-6 text-center">
-                 <Link to={`/dashboard/updateCamp/${camp._id}`}>
-                 <button
-                    
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-300 mr-2"
-                  >
-                    Update
-                  </button>
-                 </Link>
+                  <Link to={`/dashboard/updateCamp/${camp._id}`}>
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-300 mr-2">
+                      Update
+                    </button>
+                  </Link>
                   <button
-                    // onClick={() => handleDelete(camp._id)}
+                    onClick={() => handleDelete(camp._id)}
                     className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
                   >
                     Delete

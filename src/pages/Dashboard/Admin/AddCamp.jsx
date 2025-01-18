@@ -6,9 +6,11 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 const AddCamp = () => {
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const {
     register,
@@ -29,6 +31,7 @@ const AddCamp = () => {
       await axiosSecure.post(`/camps`, newCamp);
       toast.success("Camp added successfully!");
       reset();
+      navigate('/dashboard/manage-camp')
     } catch (error) {
       console.error("Error adding camp:", error);
       toast.error("Failed to add the camp. Please try again.");
