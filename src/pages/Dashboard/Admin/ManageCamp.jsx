@@ -1,14 +1,14 @@
-import {  useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const ManageCamp = () => {
   const axiosSecure = useAxiosSecure();
 
-  
   const {
     data: camps,
     isLoading,
@@ -36,6 +36,9 @@ const ManageCamp = () => {
 
   return (
     <div className="container mx-auto px-6 py-10">
+      <Helmet>
+        <title>Manage Camp | CareSync</title>
+      </Helmet>
       <h1 className="text-3xl font-bold mb-6">Manage Camps</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border rounded-lg shadow-md">
