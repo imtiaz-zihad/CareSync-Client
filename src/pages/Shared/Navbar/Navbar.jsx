@@ -17,20 +17,23 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="fixed w-full bg-white z-10 shadow-sm">
+    <div className="fixed container bg-white z-10 shadow-sm">
       <div className="border-b-[1px]">
-        <div className="container mx-auto px-4 md:px-10 lg:px-20">
+        <div className="container mx-auto px-4 md:px-10 lg:px-10">
           <div className="flex flex-row items-center justify-between gap-3">
-            {/* Logo */}
             <Link to="/">
-              <img
-                className="w-16"
-                src={logo}
-                alt="logo"
-                width="100"
-                height="100"
-              />
+              <div className="flex flex-row items-center justify-center">
+                <img
+                  className="w-16"
+                  src={logo}
+                  alt="logo"
+                  width="100"
+                  height="100"
+                />
+                <h2 className="text-2xl text-sky-400 font-bold">CareSync</h2>
+              </div>
             </Link>
+
             <div className="flex items-center gap-4">
               <Link
                 to="/"
