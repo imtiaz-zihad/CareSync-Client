@@ -124,7 +124,7 @@ export const router = createBrowserRouter([
           </AdminRouter>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/camps/${params.id}`),
+          fetch(`https://caresync-server.vercel.app/camps/${params.id}`),
       },
     ],
   },
