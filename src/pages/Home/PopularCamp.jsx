@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../Shared/LoadingSpinner/LoadingSpinner";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const PopularCamp = () => {
+  const axiosPublic = useAxiosPublic();
   const { data: camps = [], isLoading, isError, error } = useQuery({
     queryKey: ["camps"],
     queryFn: async () => {
-      const { data } = await axios(`${import.meta.env.VITE_Server_LINK}/camps`);
+      const { data } = await axiosPublic(`/camps`);
       if (!Array.isArray(data)) {
         console.error("Unexpected API response:", data);
         throw new Error("API response is not an array");
