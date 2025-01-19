@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 const ManageCamp = () => {
   const axiosSecure = useAxiosSecure();
 
-  // Fetch camps created by the organizer
+  
   const {
     data: camps,
     isLoading,

@@ -4,11 +4,15 @@ import logo from "../../../assets/logo.png";
 import avatarImg from "../../../assets/placeholder.jpg";
 import { AiOutlineMenu } from "react-icons/ai";
 import { AuthContext } from "../../../providers/AuthProvider";
+import useAdmin from "../../../hooks/useAdmin";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const [isAdmin] = useAdmin();
+
+  console.log(isAdmin);
 
   const isActive = (path) => location.pathname === path;
 
@@ -31,7 +35,9 @@ const Navbar = () => {
               <Link
                 to="/"
                 className={`${
-                  isActive("/") ? "text-blue-500 font-semibold" : "text-gray-700"
+                  isActive("/")
+                    ? "text-blue-500 font-semibold"
+                    : "text-gray-700"
                 }`}
               >
                 Home
@@ -82,14 +88,25 @@ const Navbar = () => {
                           Home
                         </Link>
                         <Link
-                          to="/dashboard/my-camp"
+                          to={
+                            isAdmin
+                              ? "/dashboard/manage-camp"
+                              : "/dashboard/my-camp"
+                          }
                           onClick={() => setIsOpen(false)}
                           className={`px-4 py-3 hover:bg-neutral-100 transition font-semibold ${
-                            isActive("/dashboard") ? "bg-neutral-200" : ""
+                            isActive(
+                              isAdmin
+                                ? "/dashboard/manage-camp"
+                                : "/dashboard/my-camp"
+                            )
+                              ? "bg-neutral-200"
+                              : ""
                           }`}
                         >
                           Dashboard
                         </Link>
+
                         <div
                           onClick={() => {
                             setIsOpen(false);
