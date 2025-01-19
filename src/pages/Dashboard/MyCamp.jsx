@@ -98,7 +98,7 @@ const MyCamp = () => {
                   </td>
                   <td className="px-4 py-2 text-center">
                     <button
-                      className={`px-4 py-2 text-white rounded ${camp.paymentStatus ? "bg-green-500 hover:bg-green-600 transition" : "bg-gray-400 cursor-not-allowed"}`}
+                      className={`px-4 py-2 text-white rounded ${camp.paymentConfirmed ? "bg-green-500 hover:bg-green-600 transition" : "bg-gray-400 cursor-not-allowed"}`}
                       onClick={() => {
                         setSelectedCamp(camp);
                         setIsModalOpen(true);
