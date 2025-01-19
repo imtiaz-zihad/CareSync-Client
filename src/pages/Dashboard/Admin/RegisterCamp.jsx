@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
+import Swal from "sweetalert2";
 
 const RegisterCamp = () => {
   const axiosSecure = useAxiosSecure();
   const [loadingCampId, setLoadingCampId] = useState(null);
 
-  // Fetch registered camps
+
   const { data: camps = [], isLoading, refetch } = useQuery({
     queryKey: ["registeredCamps"],
     queryFn: async () => {
@@ -16,7 +17,7 @@ const RegisterCamp = () => {
     },
   });
 
-  // Handle payment confirmation
+ 
   const handleConfirm = async (campId) => {
     try {
       setLoadingCampId(campId);
@@ -29,20 +30,42 @@ const RegisterCamp = () => {
     }
   };
 
-  // Handle camp deletion (only for unpaid camps)
+
   const handleDelete = async (campId) => {
-    if (!window.confirm("Are you sure you want to delete this camp?")) return;
-    
-    try {
-      setLoadingCampId(campId);
-      await axiosSecure.delete(`/register-camp/${campId}`);
-      await refetch();
-    } catch (error) {
-      console.error("Error deleting camp:", error);
-    } finally {
-      setLoadingCampId(null);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          setLoadingCampId(campId);
+          await axiosSecure.delete(`/register-camp/${campId}`);
+          await refetch();
+  
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your camp has been deleted.",
+            icon: "success"
+          });
+        } catch (error) {
+          console.error("Error deleting camp:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong. Please try again.",
+            icon: "error"
+          });
+        } finally {
+          setLoadingCampId(null);
+        }
+      }
+    });
   };
+  
 
   if (isLoading) return <LoadingSpinner />;
 
