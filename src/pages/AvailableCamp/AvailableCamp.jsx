@@ -32,12 +32,12 @@ const AvailableCamp = () => {
         <title>Available Camp | CareSync</title>
       </Helmet>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 ">
         {Array.isArray(camps) && camps.length > 0 ? (
           camps.map((camp) => (
-            <div
+            <div  
               key={camp._id || Math.random()}
-              className="camp-card bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="camp-card mt-20 bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               <img
                 src={camp.image || "default-image.jpg"}

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
+import SearchBar from "../Shared/SearchBar/SearchBar";
 
 const MyCamp = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,6 +15,8 @@ const MyCamp = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCamp, setSelectedCamp] = useState(null);
   const [feedback, setFeedback] = useState("");
+  const [filteredCamps, setFilteredCamps] = useState([]);
+  const [sortBy, setSortBy] = useState("name");
 
   const {
     data: camps = [],
@@ -23,11 +26,24 @@ const MyCamp = () => {
     queryKey: ["myCamps"],
     queryFn: async () => {
       const { data } = await axiosSecure.get(`/my-camps/${user.email}`);
+      setFilteredCamps(data); // Initialize filtered camps
       return data;
     },
   });
 
+  const handleSearch = (query) => {
+    const lowerQuery = query.toLowerCase();
+    const filtered = camps.filter(
+      (camp) =>
+        camp.name.toLowerCase().includes(lowerQuery) ||
+        camp.participantName.toLowerCase().includes(lowerQuery)
+    );
+    setFilteredCamps(filtered);
+  };
+
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to cancel this registration?")) return;
+
     try {
       await axiosSecure.delete(`/my-camps/${id}`);
       toast.success("Registration canceled successfully.");
@@ -40,7 +56,10 @@ const MyCamp = () => {
 
   const handleFeedbackSubmit = async () => {
     try {
-      await axiosSecure.post(`/my-camps/feedback/${selectedCamp._id}`, { feedback, Name: user?.displayName }  );
+      await axiosSecure.post(`/my-camps/feedback/${selectedCamp._id}`, {
+        feedback,
+        Name: user?.displayName,
+      });
       toast.success("Feedback submitted successfully.");
       setIsModalOpen(false);
       setFeedback("");
@@ -48,6 +67,16 @@ const MyCamp = () => {
       console.error("Error submitting feedback:", error.message);
       toast.error("Failed to submit feedback. Please try again.");
     }
+  };
+
+  const handleSortChange = (e) => {
+    const sortValue = e.target.value;
+    setSortBy(sortValue);
+
+    const sortedCamps = [...filteredCamps].sort((a, b) =>
+      a[sortValue].localeCompare(b[sortValue])
+    );
+    setFilteredCamps(sortedCamps);
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -58,8 +87,21 @@ const MyCamp = () => {
       <Helmet>
         <title>My Camps | CareSync</title>
       </Helmet>
+
       <h2 className="text-4xl font-bold text-center mb-6">My Camps</h2>
-      {camps.length === 0 ? (
+
+      <div className="flex justify-between items-center mb-4">
+        <SearchBar onSearch={handleSearch} />
+        <select
+          onChange={handleSortChange}
+          className="px-3 py-2 border rounded-md"
+        >
+          <option value="name">Sort by Name</option>
+          <option value="participantName">Sort by Participant Name</option>
+        </select>
+      </div>
+
+      {filteredCamps.length === 0 ? (
         <p className="text-center text-gray-600">No camps registered.</p>
       ) : (
         <div className="overflow-x-auto">
@@ -75,7 +117,7 @@ const MyCamp = () => {
               </tr>
             </thead>
             <tbody>
-              {camps.map((camp, index) => (
+              {filteredCamps.map((camp, index) => (
                 <tr key={index} className="border-t border-gray-300">
                   <td className="px-4 py-2 text-center">{camp.name}</td>
                   <td className="px-4 py-2 text-center">${camp.fees}</td>
@@ -84,8 +126,13 @@ const MyCamp = () => {
                     {camp.paymentStatus ? (
                       <span className="text-green-500">Paid</span>
                     ) : (
-                      <Link to={`/dashboard/payment`} state={{ price: camp.fees, campId: camp._id }}>
-                        <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">Pay</button>
+                      <Link
+                        to={`/dashboard/payment`}
+                        state={{ price: camp.fees, campId: camp._id }}
+                      >
+                        <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">
+                          Pay
+                        </button>
                       </Link>
                     )}
                   </td>
@@ -98,7 +145,11 @@ const MyCamp = () => {
                   </td>
                   <td className="px-4 py-2 text-center">
                     <button
-                      className={`px-4 py-2 text-white rounded ${camp.paymentConfirmed ? "bg-green-500 hover:bg-green-600 transition" : "bg-gray-400 cursor-not-allowed"}`}
+                      className={`px-4 py-2 text-white rounded ${
+                        camp.paymentConfirmed
+                          ? "bg-green-500 hover:bg-green-600 transition"
+                          : "bg-gray-400 cursor-not-allowed"
+                      }`}
                       onClick={() => {
                         setSelectedCamp(camp);
                         setIsModalOpen(true);
@@ -108,7 +159,11 @@ const MyCamp = () => {
                       Feedback
                     </button>
                     <button
-                      className={`ml-2 px-4 py-2 text-white rounded ${camp.paymentStatus ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600 transition"}`}
+                      className={`ml-2 px-4 py-2 text-white rounded ${
+                        camp.paymentStatus
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-red-500 hover:bg-red-600 transition"
+                      }`}
                       onClick={() => handleDelete(camp._id)}
                       disabled={camp.paymentStatus}
                     >
@@ -121,10 +176,13 @@ const MyCamp = () => {
           </table>
         </div>
       )}
+
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <h3 className="text-xl font-semibold">Submit Feedback for {selectedCamp?.name}</h3>
+          <div className="bg-white p-6 rounded shadow-lg w-1/3">
+            <h3 className="text-xl font-semibold">
+              Submit Feedback for {selectedCamp?.name}
+            </h3>
             <textarea
               className="w-full p-2 border rounded mt-2"
               rows="4"
@@ -132,18 +190,20 @@ const MyCamp = () => {
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
             ></textarea>
-            <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-              onClick={handleFeedbackSubmit}
-            >
-              Submit
-            </button>
-            <button
-              className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Close
-            </button>
+            <div className="flex justify-end mt-4">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                onClick={handleFeedbackSubmit}
+              >
+                Submit
+              </button>
+              <button
+                className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
